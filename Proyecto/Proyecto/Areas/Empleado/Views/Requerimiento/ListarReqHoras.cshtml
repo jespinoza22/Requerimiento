@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "ListarReqHoras";
+    Layout = "~/Areas/Empleado/Views/Shared/_Layout.cshtml";
+    List<Datos.Model.Requerimiento> lista = ViewBag.listaReq;
+}
+
+
+<style type="text/css">
+    .deshabilitar {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    th {
+        font-size: 16px;
+        font-family: "Didot";
+        font-weight: bold;
+    }
+
+    td {
+        font-size: 14px;
+        font-family: "Didot";
+    }
+
+    .label {
+        font-size: 17px;
+        font-family: "Didot";
+        color: #333333;
+    }
+</style>
+<div class="container" style="width:100%;height:100%">
+    <div style="height:50px"></div>
+    <div class="table-responsive col-md-12" style="height: 300px">
+        <table class="table table-hover Display" id="tabla">
+            <thead>
+            <th>NOMBRE</th>
+            <th>ENCARGADO</th>
+            <th>FECHA REGISTRO</th>
+            <th align="center">ESTIMADO</th>
+            </thead>
+            <tbody>
+                @foreach (var reque in lista)
+                {
+                    <tr>
+                        <td style="width: 25%">@reque.Descripcion</td>
+                        <td style="width: 25%">@reque.Usuario.Nombres</td>
+                        <td style="width: 25%">@reque.FechaCreacion</td>
+                        <td style="width: 25%;text-align:center">
+                            @Html.ActionLink(reque.TiempoEstimado.ToString(), "DetalleHoras", "Requerimiento", new { area = "Empleado",id=reque.IdRequerimiento},null)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <span class="col-md-6" style="margin-top: 10px">
+            <label id="cantidaRegistros" class="label"></label>
+        </span>
+        <span class="col-md-6" align="right">
+            <ul class="pagination" id="ulStart"></ul>
+        </span>
+    </div>
+    <script>
+        $(document).ready(function () {   
+            mCambiarSeleccion("#configuracion", "#detalleHora")
+        })
+    </script>

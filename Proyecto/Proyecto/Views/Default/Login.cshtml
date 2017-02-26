@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Login";
+}
+
+<link rel="stylesheet" href="~/Estilos/css/bootstrap.min.css">
+@using (Html.BeginForm("IniciarSesion", "Default", FormMethod.Post))
+{
+    <div style="width: 100%;height: 100%">
+        <div class="container">
+            <div style="margin-top: 10%">
+                <div class=" col-md-4"></div>
+                <div class=" col-md-4" style="border-width: 2px; border-style: solid;border-color:#31B0D5;border-radius: 5px">
+                    <div align="center">
+                        <h3>Ingreso al Sistema</h3>
+                    </div>
+                    <div class="input-group" style="width: 100%">
+                        <span class="input-group-addon" id="basic-addon1" style="width: 32% !important">Usuario</span>
+                        <input type="text" class="form-control" placeholder="Ingrese el usuario" name="musuario" aria-describedby="basic-addon1">
+                    </div><br>
+                    <div class="input-group" style="width: 100%">
+                        <span class="input-group-addon" id="basic-addon1" style="width: 32% !important">Password</span>
+                        <input type="Password" class="form-control" placeholder="********" name="password" aria-describedby="basic-addon1">
+                    </div><br>
+                    <div align="center">
+                        <button type="submit" data-ajax="true" class="btn btn-info navbar-btn">
+                            <span class="glyphicon glyphicon-ok"></span> Iniciar Sesion
+                        </button>
+                    </div>
+                    <div align="left" class="input-group">
+                        <a href="@Url.Action("RegistrarCrud","Default")">Registrarse</a>
+                    </div><br>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </div>
+}
+
+

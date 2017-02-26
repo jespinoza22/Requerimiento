@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "DetalleHoras";
+    Layout = "~/Areas/Empleado/Views/Shared/_Layout.cshtml";
+
+    Datos.Model.Requerimiento requerimiento = ViewBag.Requerimiento;
+    List<Datos.Model.Horas> horas = ViewBag.horas;
+    var cantidad = ViewBag.cantidad;
+    var codigo = 1;
+}
+
+
+
+<style type="text/css">
+    .deshabilitar {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    th {
+        font-size: 16px;
+        font-family: "Didot";
+        font-weight: bold;
+    }
+
+    td {
+        font-size: 14px;
+        font-family: "Didot";
+    }
+
+    .label {
+        font-size: 17px;
+        font-family: "Didot";
+        color: #333333;
+    }
+</style>
+<div class="page-header">
+    <h3>@requerimiento.Descripcion</h3>
+    <p>@requerimiento.Detalle</p>
+</div>
+<div class="container" style="width:100%;height:100%">
+    <div style="height:50px"></div>
+    <div class="table-responsive col-md-12" style="height: 300px">
+        <table class="table table-hover Display" id="tabla">
+            <thead>
+            <th>ID HORA</th>
+            <th>DETALLE</th>
+            <th>FECHA REGISTRO</th>
+            <th align="center">HORAS</th>
+            </thead>
+            <tbody>
+                @foreach (var hora in horas)
+                {
+                    <tr>
+                        <td style="width: 25%; text-align:center">@codigo.ToString().PadLeft(3,'0')</td>
+                        <td style="width: 25%">@hora.Detalle</td>
+                        <td style="width: 25%">@hora.FechaRegistro</td>
+                        <td style="width: 25%;text-align:center">
+                            @hora.Horas1    
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <label class="label">Horas Estimadas:  </label>@requerimiento.TiempoEstimado
+            </div>
+            <div class="col-md-6">
+                <label class="label">Horas Registradas:  </label>@horas.AsEnumerable().Sum(x => x.Horas1)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="label">Responsable del Requerimiento: </label>@requerimiento.Usuario.Nombres
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.ActionLink("Regresar<<", "ListarReqHoras", "Requerimiento", new { area = "Empleado" })
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            mCambiarSeleccion("#configuracion", "#detalleHora")
+        })
+    </script>
+

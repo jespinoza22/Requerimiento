@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Empleado/Views/Shared/_Layout.cshtml";
+    List<Datos.Model.Requerimiento> lista = ViewBag.listaReq;
+}
+
+@*<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+
+<style type="text/css">
+    .deshabilitar {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    th {
+        font-size: 16px;
+        font-family: "Didot";
+        font-weight: bold;
+    }
+
+    td {
+        font-size: 14px;
+        font-family: "Didot";
+    }
+
+    .label {
+        font-size: 17px;
+        font-family: "Didot";
+        color: #333333;
+    }
+</style>
+<div class="container" style="width:100%;height:100%">
+    <div style="height:50px"></div>
+    <div class="table-responsive col-md-12" style="height: 300px">
+        <table class="table table-hover Display" id="tabla">
+            <thead>
+                <th>NOMBRE</th>
+                <th>ENCARGADO</th>
+                <th>FECHA REGISTRO</th>
+                <th></th>
+            </thead>
+            <tbody>
+                @foreach (var reque in lista)
+                {
+                    <tr>
+                        <td style="width: 25%">@reque.Descripcion</td>
+                        <td style="width: 25%">@reque.Usuario.Nombres</td>
+                        <td style="width: 25%">@reque.FechaCreacion</td>
+                        <td style="width: 25%">
+                            <div class="btn-group">
+                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;<span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a id="horas" data-id="@reque.IdRequerimiento" data-name="@reque.Descripcion"  href="javascript:void(0);" ><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;&nbsp;Agregar Horas <span></span></a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="~/Empleado/Requerimiento/Crud/@reque.IdRequerimiento.ToString()"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;Editar</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;&nbsp;Eliminar</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <span class="col-md-6" style="margin-top: 10px">
+            <label id="cantidaRegistros" class="label"></label>
+        </span>
+        <span class="col-md-6" align="right">
+            <ul class="pagination" id="ulStart"></ul>
+        </span>
+    </div>
+    <div>
+        <button class="btn btn-info" style="margin: 18px"
+         onclick="@("window.location.href='" + @Url.Action("Crud", "Requerimiento",new { area="Empleado"}) + "'");">
+        Nuevo Registro</button>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        @*@Html.Partial("~/Areas/Empleado/Views/Requerimiento/_Horas.cshtml")*@
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div id='myModalContent'></div>  
+            </div>
+        </div>
+    </div>
+
+            <script type="text/javascript">
+                var json;
+                var filas;
+                var numeroPorPaginas = 3;
+                var numeroPaginas = 1;
+                var paginaActual;
+
+                function AgregarHoras() {
+                    $('#myModal').modal('show');
+                }
+                function Iniciar() {
+                    //tabla inicial
+                    var valor = jQuery.parseJSON(json);
+
+                    //$('#jsonText').text(json);
+                    filas = valor.myRows.length;
+
+                    numeroPaginas = Math.ceil(filas / numeroPorPaginas);
+
+                    //agregando el paginado
+                    $('#ulStart').empty();
+                    $('#ulStart').append("<li id='inicioLi'><a href='#'>Anterior</a></li>");//&laquo;
+                    for (var i = 1; i <= numeroPaginas; i++) {
+                        $('#ulStart').append("<li><a href='#'>" + i.toString() + "</a></li>");
+                    }
+                    $('#ulStart').append("<li id='finalLi'><a href='#'>Siguiente</a></li>");//&raquo;
+
+                    //Agregar funcion click
+                    $('#ulStart li').click(function (e) {
+                        Paginado($('a', this).text(), this.id);
+                    });
+                    //iniciar paginado
+                    Paginado(1);
+
+                    //seteando valores
+                    $('#cantidaRegistros').text('Se encontraron ' + filas.toString() + ' registros en total');
+                };
+
+                function Paginado(pagina, id) {
+                    var indicador = 1;
+
+                    switch (id) {
+                        case ("inicioLi"):
+                            pagina = paginaActual - 1;
+                            break;
+                        case ("finalLi"):
+                            pagina = paginaActual + 1;
+                            break;
+                        default:
+                    }
+                    $('#tabla tbody tr').each(function () {
+                        if (indicador > (pagina - 1) * numeroPorPaginas && indicador <= pagina * numeroPorPaginas) {
+                            $(this).removeAttr("style");
+
+                        } else { $(this).css("display", "none"); }
+
+                        indicador += 1;
+                    });
+
+                    paginaActual = pagina;
+
+                    if (pagina == numeroPaginas) {
+                        $('#finalLi ').addClass("deshabilitar");
+                    } else { $('#finalLi ').removeAttr("class"); }
+
+                    if (pagina == 1) {
+                        $('#inicioLi ').addClass("deshabilitar");
+                    } else { $('#inicioLi ').removeAttr("class"); }
+                };
+
+                $(document).ready(function () {
+                    //transformar la tabla a json
+                    var myRows = { myRows: [] };
+                    var $th = $('table th');
+                    $('table tbody tr').each(function (i, tr) {
+                        var obj = {}, $tds = $(tr).find('td');
+                        $th.each(function (index, th) {
+                            obj[$(th).text()] = $tds.eq(index).text();
+                        });
+                        myRows.myRows.push(obj);
+                    });
+                    json = JSON.stringify(myRows);
+
+                    Iniciar();
+
+                    mCambiarSeleccion("#configuracion", "#requerimiento")
+                })
+
+                //$("#horas").on("click", function () {
+                //    var id = $(this).data('id');
+                //    $.ajax({
+                //        url: "Horas/" + id,
+                //        cache: true
+                //    }).done(function (data) {
+                //    });
+                //    AgregarHoras();
+                //});
+                function OcultarModal()
+                {
+                    $('#myModal').modal('hide');
+                }
+
+                var TeamDetailPostBackURL = 'Horas';
+                $(function () {
+                    $("#horas").click(function () {
+                        debugger;
+                        var $buttonClicked = $(this);
+                        var id = $buttonClicked.attr('data-id');
+                        var name = $buttonClicked.attr('data-name');
+                        var options = { "backdrop": "static", keyboard: true };
+                        $.ajax({
+                            type: "GET",
+                            url: TeamDetailPostBackURL,
+                            contentType: "application/json; charset=utf-8",
+                            data: { "id": id, "Name": name },
+                            datatype: "json",
+                            success: function (data) {
+                                debugger;
+                                $('#myModalContent').html(data);
+                                $('#myModal').modal(options);
+                                $('#myModal').modal('show');
+
+                            },
+                            error: function (xhr) {
+                                alert(xhr.responseText);
+                                //alert("Dynamic content load failed.");
+                            }
+                        });
+                    });
+                    //$("#closebtn").on('click',function(){  
+                    //    $('#myModal').modal('hide');    
+
+                    $("#closbtn").click(function () {
+                        $('#myModal').modal('hide');
+                    });
+                });
+
+            </script>

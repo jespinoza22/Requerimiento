@@ -16,3 +16,11 @@ Makefile.in
 /install-sh
 /missing
 /stamp-h1
+*.dll
+*.exe
+*.pdb
+*.xml
+*.csproject
+*.cache
+*.txt
+*.sln

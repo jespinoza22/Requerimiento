@@ -1,0 +1,216 @@
+﻿@model Datos.Model.Requerimiento
+
+@{
+    ViewBag.Title = "Crud";
+    Layout = "~/Areas/Empleado/Views/Shared/_Layout.cshtml";
+
+    List<Datos.Model.General> PrioridadList = ViewBag.PrioridadList;
+    List<Datos.Model.General> TipoList = ViewBag.TipoList;
+    List<Datos.Model.General> ProyectoList = ViewBag.ProyectoList;
+    List<Datos.Model.General> EstadoList = ViewBag.EstadoList; 
+    List<Datos.Model.Usuario> UsuarioList = ViewBag.UsuarioList;
+}
+
+<h2>Crud</h2>
+
+@using (Html.BeginForm("GuardarRequerimiento", "Requerimiento", FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Requerimiento</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(x=>x.IdRequerimiento)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Detalle, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Detalle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Detalle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.FechaCreacion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaCreacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaCreacion, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Prioridad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Prioridad, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Prioridad, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="form-group">
+            <label class="control-label col-md-2">Prioridad</label>
+            <div class="col-md-4">
+                <select class="form-control" name="Prioridad">
+                    <option value="0">Seleccione</option>
+                    @foreach (var prioridad in PrioridadList)
+                    {
+                        <option value="@prioridad.Descripcion" @if (Model.IdRequerimiento > 0) { @(prioridad.Descripcion == Model.Prioridad ? "Selected" : "")}>@prioridad.Descripcion</option>
+                    }
+                </select>
+            </div>
+        </div>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.TipoRequerimiento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.TipoRequerimiento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TipoRequerimiento, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="form-group">
+            <label class="control-label col-md-2">Tipo</label>
+            <div class="col-md-4">
+                <select class="form-control" name="TipoRequerimiento">
+                    <option value="0">Seleccione</option>
+                    @foreach (var tipo in TipoList)
+                    {
+                        <option value="@tipo.Descripcion" @if (Model.IdRequerimiento > 0) { @(tipo.Descripcion == Model.TipoRequerimiento ? "Selected" : "")}>@tipo.Descripcion</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ArchivoAdjunto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ArchivoAdjunto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ArchivoAdjunto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.AliasArchivo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AliasArchivo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AliasArchivo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Estado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="form-group">
+            <label class="control-label col-md-2">Estado</label>
+            <div class="col-md-4">
+                <select class="form-control" name="Estado">
+                    <option value="0">Seleccione</option>
+                    @foreach (var estado in EstadoList)
+                    {
+                        <option value="@estado.Descripcion" @if (Model.IdRequerimiento > 0) { @(estado.Descripcion == Model.Estado ? "Selected" : "")}>@estado.Descripcion</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaEntrega, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="input-group date col-md-4" id="datetimepicker1">
+                @Html.EditorFor(model => model.FechaEntrega, new { htmlAttributes = new { @class = "form-control",style = "margin-left: 15px;width:210px"} })
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                <script type="text/javascript">
+		                        $(function () {
+		                            $('#datetimepicker1').datetimepicker({
+                        format: 'DD/MM/YYYY'
+
+                                    });
+                });
+                </script>
+           </div>
+            @Html.ValidationMessageFor(model => model.FechaEntrega, "", new { @class = "text-danger",style="margin-left:145px" })
+            @*<div class='input-group date col-md-4' id='datetimepicker1'>
+                <input type='text' class="form-control" name="FechaEntrega" style="width: 150px" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+            <script type="text/javascript">
+		                        $(function () {
+		                            $('#datetimepicker1').datetimepicker({
+		                	            format: 'DD/MM/YYYY'
+		                            });
+		                        });
+            </script>*@
+
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Avance, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Avance, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Avance, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TiempoEstimado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.TiempoEstimado, new { htmlAttributes = new { @class = "form-control" } })           
+            </div><label>Horas</label><br />
+
+            @Html.ValidationMessageFor(model => model.TiempoEstimado, "", new { @class = "text-danger" })
+        </div>
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Proyecto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Proyecto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Proyecto, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="form-group">
+            <label class="control-label col-md-2">Proyecto</label>
+            <div class="col-md-4">
+                <select class="form-control" name="Proyecto">
+                    <option value="0">Seleccione</option>
+                    @foreach (var proyecto in ProyectoList)
+                    {
+                        <option value="@proyecto.Descripcion" @if (Model.IdRequerimiento > 0) { @(proyecto.Descripcion == Model.Proyecto ? "Selected" : "")}>@proyecto.Descripcion</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Usuario</label>
+            <div class="col-md-4">
+                <select class="form-control" name="IdUsuario">
+                    <option value="0">Seleccione</option>
+                    @foreach (var usuario in UsuarioList)
+                    {
+                        <option value="@usuario.IdUsuario" @if (Model.IdRequerimiento > 0) { @(usuario.IdUsuario == Model.IdUsuario ? "Selected" : "")}>@usuario.Nombres</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @*<input type="submit" value="Create" class="btn btn-default" />*@
+                <button data-ajax="true" class="btn btn-default">Registrar</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Regresar", "Index","Requerimiento",new { area="Empleado"})
+</div>

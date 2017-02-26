@@ -1,0 +1,51 @@
+﻿
+
+
+
+@model Datos.Model.Horas
+
+@using (Html.BeginForm("GuardarHoras", "Requerimiento", FormMethod.Post))
+{
+    <div>
+            <input type="hidden" value="@ViewBag.id" name="IdRequerimiento"/>
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel"><b>Requerimiento : </b> @ViewBag.name</h3>
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Horas</h5>
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>-->
+            </div>
+            <div class="modal-body">
+                <form class="form-inline">
+                    <div class="form-group col-md-6" style="padding: 0;">
+                        <label>Horas:</label>
+                        <input type="text" name="Horas1" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6" style="padding: 0;align-items: right">
+                        <label>Fecha:</label>
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' name="FechaRegistro" class="form-control" style="width: 150px" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        <script type="text/javascript">
+		                        $(function () {
+		                            $('#datetimepicker1').datetimepicker({
+		                	            format: 'DD/MM/YYYY'
+		                            });
+		                        });
+                        </script>
+                    </div>
+                </form><br><br>
+                <div class="form-group">
+                    <label>Detalle:</label>
+                    <textarea class="form-control" name="Detalle" cols="40" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" data-ajax="true" class="btn btn-primary">Guardar Horas</button>
+            </div>
+        </div>
+}
